@@ -1,0 +1,121 @@
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.footer-left, .footer-middle, .footer-right {
+  flex: 1;
+  min-width: 250px;
+}
+
+.footer-left h3, .footer-middle h3, .footer-right h3 {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.footer-left p, .footer-middle ul, .footer-right p {
+  font-size: 14px;
+}
+
+.footer-middle ul {
+  list-style-type: none;
+}
+
+.footer-middle ul li {
+  margin-bottom: 10px;
+}
+
+.footer-middle ul li a {
+  text-decoration: none;
+  color: #fff;
+  transition: color 0.3s ease;
+}
+
+.footer-middle ul li a:hover {
+  color: #ff9800;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 12px;
+}
+
+.footer-bottom p {
+  color: #bbb;
+}
+.footer {
+  background-color: #333;
+  color: #fff;
+  padding: 40px 20px;
+  font-size: 14px;
+}
+div.example {
+  padding-left: 10%;
+  padding-right: 10%;
+}
+
+@media screen and (max-width: 800px) {
+  div.example {
+    padding: 1%;
+  }
+}
+p {
+  line-height: 1.2;
+  font-size: 16px;
+}
+.site-content{
+  word-break: keep-all;
+  word-wrap: break-word;
+}
+footer {
+  border-radius: 15px;
+text-align: center;
+padding: 3px;
+background-color: #6ff2d2;
+color: black;
+}
+.c3{
+  border-radius: 25px;
+  border: 1px solid black;
+  text-align: center;
+  background-color: #6ff2d4;
+  width: 60%;
+  margin-top: 20px;
+  margin-left: 20%;
+  padding: 5px;
+  line-height: 1.5;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+.n1{
+  padding-left: 5%;
+}
+.r{
+  width: 95%;
+  align-items: center;
+
+}
+.c1{
+    background-color: #6ff2d2;
+    padding: 0.5px;
+    text-align: center;
+}
+.table-container {
+  min-width: 140px;         /* Only allow up to 150px width */
+  overflow-x: auto;         /* Show scrollbar if content exceeds 150px */
+  border: 1px solid #ccc;
+}
+
+table {
+  width: 100%;              /* Take up full container width initially */
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #999;
+  padding: 8px;
+  word-break: break-word;   /* Allow word to break to new line if needed */
+}
