@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            margin-top: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        h2 {
+            color: #2575fc;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+        
+        .description {
+            color: white;
+            font-size: 1.1rem;
+            max-width: 600px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .calculator-type {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+        
+        .calc-btn {
+            padding: 12px 20px;
+            background: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .calc-btn.active {
+            background: #2575fc;
+            color: white;
+        }
+        
+        .calc-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .calculator {
+            display: none;
+        }
+        
+        .calculator.active {
+            display: block;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .input-box {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus {
+            border-color: #2575fc;
+            outline: none;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 12px 20px;
+            background: #2575fc;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+        
+        button:hover {
+            background: #1c64e0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        button.secondary {
+            background: #6c757d;
+        }
+        
+        button.secondary:hover {
+            background: #5a6268;
+        }
+        
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+        }
+        
+        .result h3 {
+            color: #2575fc;
+            margin-bottom: 10px;
+        }
+        
+        .result-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #28a745;
+        }
+        
+        .explanation {
+            margin-top: 15px;
+            font-style: italic;
+            color: #666;
+        }
+        
+        footer {
+            margin-top: 40px;
+            color: white;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 600px) {
+            .input-group {
+                flex-direction: column;
+            }
+            
+            .input-box {
+                min-width: 100%;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Time Calculator</h1>
+    <p class="description">Calculate time differences, add or subtract time, and convert between time units</p>
+    
+    <div class="container">
+        <div class="calculator-type">
+            <button class="calc-btn active" data-calc="difference">Time Difference</button>
+            <button class="calc-btn" data-calc="add-subtract">Add/Subtract</button>
+            <button class="calc-btn" data-calc="convert">Convert Units</button>
+        </div>
+        
+        <!-- Time Difference Calculator -->
+        <div id="difference-calc" class="calculator active">
+            <h2>Calculate Time Difference</h2>
+            <div class="input-group">
+                <div class="input-box">
+                    <label for="start-time">Start Time</label>
+                    <input type="time" id="start-time" value="09:00">
+                </div>
+                <div class="input-box">
+                    <label for="end-time">End Time</label>
+                    <input type="time" id="end-time" value="17:00">
+                </div>
+            </div>
+            <div class="input-group">
+                <div class="input-box">
+                    <label for="start-date">Start Date (optional)</label>
+                    <input type="date" id="start-date">
+                </div>
+                <div class="input-box">
+                    <label for="end-date">End Date (optional)</label>
+                    <input type="date" id="end-date">
+                </div>
+            </div>
+            <button id="calculate-difference">Calculate Difference</button>
+            
+            <div id="difference-result" class="result">
+                <h3>Time Difference</h3>
+                <div class="result-value">8 hours 0 minutes</div>
+                <div class="explanation">From 09:00 to 17:00</div>
+            </div>
+        </div>
+        
+        <!-- Add/Subtract Time Calculator -->
+        <div id="add-subtract-calc" class="calculator">
+            <h2>Add or Subtract Time</h2>
+            <div class="input-group">
+                <div class="input-box">
+                    <label for="base-time">Start Time</label>
+                    <input type="time" id="base-time" value="12:00">
+                </div>
+            </div>
+            <div class="input-group">
+                <div class="input-box">
+                    <label for="hours-to-add">Hours to Add/Subtract</label>
+                    <input type="number" id="hours-to-add" value="2" min="-100" max="100">
+                </div>
+                <div class="input-box">
+                    <label for="minutes-to-add">Minutes to Add/Subtract</label>
+                    <input type="number" id="minutes-to-add" value="30" min="-1000" max="1000">
+                </div>
+            </div>
+            <button id="calculate-add-subtract">Calculate</button>
+            
+            <div id="add-subtract-result" class="result">
+                <h3>Result</h3>
+                <div class="result-value">14:30</div>
+                <div class="explanation">12:00 + 2 hours 30 minutes</div>
+            </div>
+        </div>
+        
+        <!-- Convert Time Units Calculator -->
+        <div id="convert-calc" class="calculator">
+            <h2>Convert Time Units</h2>
+            <div class="input-group">
+                <div class="input-box">
+                    <label for="time-value">Time Value</label>
+                    <input type="number" id="time-value" value="8" min="0" step="0.01">
+                </div>
+                <div class="input-box">
+                    <label for="from-unit">From Unit</label>
+                    <select id="from-unit">
+                        <option value="hours">Hours</option>
+                        <option value="minutes">Minutes</option>
+                        <option value="seconds">Seconds</option>
+                        <option value="days">Days</option>
+                    </select>
+                </div>
+                <div class="input-box">
+                    <label for="to-unit">To Unit</label>
+                    <select id="to-unit">
+                        <option value="minutes">Minutes</option>
+                        <option value="hours" selected>Hours</option>
+                        <option value="seconds">Seconds</option>
+                        <option value="days">Days</option>
+                    </select>
+                </div>
+            </div>
+            <button id="calculate-convert">Convert</button>
+            
+            <div id="convert-result" class="result">
+                <h3>Conversion Result</h3>
+                <div class="result-value">480 minutes</div>
+                <div class="explanation">8 hours = 480 minutes</div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Time Calculator &copy; 2023 | A handy tool for all your time calculation needs</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Calculator type toggle
+            const calcButtons = document.querySelectorAll('.calc-btn');
+            const calculators = document.querySelectorAll('.calculator');
+            
+            calcButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const calcType = this.getAttribute('data-calc');
+                    
+                    // Update active button
+                    calcButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show active calculator
+                    calculators.forEach(calc => calc.classList.remove('active'));
+                    document.getElementById(`${calcType}-calc`).classList.add('active');
+                });
+            });
+            
+            // Time Difference Calculator
+            const calculateDifferenceBtn = document.getElementById('calculate-difference');
+            const differenceResult = document.getElementById('difference-result');
+            
+            calculateDifferenceBtn.addEventListener('click', function() {
+                const startTime = document.getElementById('start-time').value;
+                const endTime = document.getElementById('end-time').value;
+                const startDate = document.getElementById('start-date').value;
+                const endDate = document.getElementById('end-date').value;
+                
+                // Create date objects
+                const start = createDateObject(startDate, startTime);
+                const end = createDateObject(endDate, endTime);
+                
+                // Calculate difference in milliseconds
+                let diffMs = end - start;
+                
+                // Handle case where end is before start (assume next day)
+                if (diffMs < 0) {
+                    diffMs += 24 * 60 * 60 * 1000; // Add 24 hours
+                }
+                
+                // Convert to hours and minutes
+                const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+                const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+                
+                // Display result
+                document.querySelector('#difference-result .result-value').textContent = 
+                    `${diffHours} hours ${diffMinutes} minutes`;
+                
+                let explanation = `From ${startTime} to ${endTime}`;
+                if (startDate || endDate) {
+                    explanation += ` (${formatDate(start)} to ${formatDate(end)})`;
+                }
+                
+                document.querySelector('#difference-result .explanation').textContent = explanation;
+                differenceResult.style.display = 'block';
+            });
+            
+            // Add/Subtract Time Calculator
+            const calculateAddSubtractBtn = document.getElementById('calculate-add-subtract');
+            const addSubtractResult = document.getElementById('add-subtract-result');
+            
+            calculateAddSubtractBtn.addEventListener('click', function() {
+                const baseTime = document.getElementById('base-time').value;
+                const hoursToAdd = parseInt(document.getElementById('hours-to-add').value);
+                const minutesToAdd = parseInt(document.getElementById('minutes-to-add').value);
+                
+                // Convert base time to minutes
+                const [baseHours, baseMinutes] = baseTime.split(':').map(Number);
+                let totalMinutes = baseHours * 60 + baseMinutes;
+                
+                // Add/subtract time
+                totalMinutes += hoursToAdd * 60 + minutesToAdd;
+                
+                // Handle negative values (previous day)
+                while (totalMinutes < 0) {
+                    totalMinutes += 24 * 60; // Add 24 hours
+                }
+                
+                // Handle more than 24 hours (next day)
+                totalMinutes %= (24 * 60);
+                
+                // Convert back to hours and minutes
+                const resultHours = Math.floor(totalMinutes / 60);
+                const resultMinutes = totalMinutes % 60;
+                
+                // Format result
+                const resultTime = `${String(resultHours).padStart(2, '0')}:${String(resultMinutes).padStart(2, '0')}`;
+                
+                // Display result
+                document.querySelector('#add-subtract-result .result-value').textContent = resultTime;
+                
+                let operation = `${baseTime}`;
+                if (hoursToAdd > 0) operation += ` + ${hoursToAdd} hours`;
+                if (hoursToAdd < 0) operation += ` - ${Math.abs(hoursToAdd)} hours`;
+                if (minutesToAdd > 0) operation += ` + ${minutesToAdd} minutes`;
+                if (minutesToAdd < 0) operation += ` - ${Math.abs(minutesToAdd)} minutes`;
+                
+                document.querySelector('#add-subtract-result .explanation').textContent = operation;
+                addSubtractResult.style.display = 'block';
+            });
+            
+            // Convert Time Units Calculator
+            const calculateConvertBtn = document.getElementById('calculate-convert');
+            const convertResult = document.getElementById('convert-result');
+            
+            calculateConvertBtn.addEventListener('click', function() {
+                const timeValue = parseFloat(document.getElementById('time-value').value);
+                const fromUnit = document.getElementById('from-unit').value;
+                const toUnit = document.getElementById('to-unit').value;
+                
+                // Convert to hours first (as a common base)
+                let valueInHours;
+                switch (fromUnit) {
+                    case 'minutes': valueInHours = timeValue / 60; break;
+                    case 'seconds': valueInHours = timeValue / 3600; break;
+                    case 'days': valueInHours = timeValue * 24; break;
+                    default: valueInHours = timeValue; // hours
+                }
+                
+                // Convert from hours to the target unit
+                let result;
+                switch (toUnit) {
+                    case 'minutes': result = valueInHours * 60; break;
+                    case 'seconds': result = valueInHours * 3600; break;
+                    case 'days': result = valueInHours / 24; break;
+                    default: result = valueInHours; // hours
+                }
+                
+                // Format result
+                const formattedResult = result.toFixed(2).replace(/\.00$/, '');
+                const toUnitText = toUnit.charAt(0).toUpperCase() + toUnit.slice(1);
+                
+                // Display result
+                document.querySelector('#convert-result .result-value').textContent = 
+                    `${formattedResult} ${toUnit}`;
+                document.querySelector('#convert-result .explanation').textContent = 
+                    `${timeValue} ${fromUnit} = ${formattedResult} ${toUnit}`;
+                convertResult.style.display = 'block';
+            });
+            
+            // Helper functions
+            function createDateObject(dateStr, timeStr) {
+                if (dateStr) {
+                    return new Date(`${dateStr}T${timeStr}`);
+                } else {
+                    const date = new Date();
+                    const [hours, minutes] = timeStr.split(':');
+                    date.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+                    return date;
+                }
+            }
+            
+            function formatDate(date) {
+                if (isToday(date)) {
+                    return date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+                } else {
+                    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+                }
+            }
+            
+            function isToday(date) {
+                const today = new Date();
+                return date.getDate() === today.getDate() &&
+                    date.getMonth() === today.getMonth() &&
+                    date.getFullYear() === today.getFullYear();
+            }
+            
+            // Initialize with today's date for date inputs
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('start-date').value = today;
+            document.getElementById('end-date').value = today;
+        });
+    </script>
+</body>
+</html>
